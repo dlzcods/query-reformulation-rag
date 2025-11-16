@@ -1,2 +1,0 @@
-1. create venv and use it
-2. run pip install -r requirements.txt for installing dependencies
