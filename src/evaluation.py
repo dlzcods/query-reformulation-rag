@@ -1,10 +1,12 @@
 import json
 import os
 import sys
+import time
 
-# Setup path to run from root or src
+print("Initializing libraries (this may take a few seconds)...")
+
 current_dir = os.path.dirname(os.path.abspath(__file__))
-# If running from inside src, parent is root
+
 root_dir = os.path.dirname(current_dir)
 if root_dir not in sys.path:
     sys.path.append(root_dir)
@@ -12,7 +14,6 @@ if root_dir not in sys.path:
 from src.rag_engine import RAGEngine
 
 def calculate_mrr(rank):
-    """Calculate Mean Reciprocal Rank score (1/rank)."""
     if rank == 0:
         return 0
     return 1.0 / rank
@@ -30,35 +31,30 @@ def run_evaluation(data_path):
     
     print(f"\n--- Starting Evaluation on {total_questions} Questions ---\n")
     
-    for item in eval_data:
+    for i, item in enumerate(eval_data):
         q = item['question']
         target_doc = item['expected_document_title'].lower()
         
         print(f"Query: {q}")
         
-        # Run Pipeline (Only need retrieval part, but we run full to be safe or optimize later)
-        # We can cheat and just call final_retrieval_and_rerank if we want speed,
-        # but better to run process_query to test the REAL pipeline including reformulation.
         try:
-            # STRATEGY: RETRIEVAL ONLY (Zero Groq Tokens)
-            # We bypass process_query (Reformulation + Generation) to avoid 429 Errors.
-            # This only tests: "If we search for X, do we find it?" (Hit Rate)
+            # 1. Hop 1: Context
+            initial_docs = engine.initial_retrieval(q)
             
-            # result = engine.process_query(q)
-            # retrieved_docs = result['final_docs']
+            # 2. Reformulation (The Core Feature)
+            reformulated_query = engine.reformulate_query(q, initial_docs)
+            print(f"  [Ref. Query] {reformulated_query}")
             
-            # USE THIS FOR EVALUATION (Safe):
-            retrieved_docs = engine.final_retrieval_and_rerank(q, top_k_initial=15, top_k_final=8)
+            # 3. Hop 2: Precision Search using NEW Query
+            retrieved_docs = engine.final_retrieval_and_rerank(reformulated_query, top_k_initial=15, top_k_final=8)
             
             # Check for Hit
-            found_rank = 0 # 0 means not found
+            found_rank = 0 
             
             for rank, doc in enumerate(retrieved_docs, start=1):
-                # Loose matching: check if target title keyword is in metadata title
                 doc_title = doc.metadata.get('title', '').lower()
                 doc_source = doc.metadata.get('source', '').lower()
                 
-                # Check match
                 if target_doc in doc_title or target_doc in doc_source:
                     found_rank = rank
                     break
@@ -72,6 +68,12 @@ def run_evaluation(data_path):
                 
         except Exception as e:
             print(f"  [ERROR] {e}")
+
+        # Rate Limit Pause (1m 30s)
+        if i < total_questions - 1:
+            print("  [Safety] Pausing 90s for API limits...", end='\r')
+            time.sleep(90)
+            print("  [Resume] Continuing...                        ")
 
     # Final Stats
     hit_rate = (hits / total_questions) * 100
