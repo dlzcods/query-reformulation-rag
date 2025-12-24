@@ -1,23 +1,22 @@
 import os
 from dotenv import load_dotenv
 
-# Load environment variables
 load_dotenv()
 
-# API Keys
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 if not GOOGLE_API_KEY:
-    # Warning or error logging could go here, but strictly raising might crash if just testing parts
     pass 
 
-# Constants
 CHUNK_SIZE = 1000
 CHUNK_OVERLAP = 200
 
-# Models
-EMBEDDING_MODEL = "models/text-embedding-004"
-LLM_MODEL = "gemini-2.5-flash"
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+LLM_PROVIDER = os.getenv("LLM_PROVIDER", "groq").lower() # Options: "gemini", "groq"
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+GROQ_MODEL = os.getenv("GROQ_MODEL")
 
-# Paths
-DATA_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "kekayaan_intelektual_sample.json")
+EMBEDDING_MODEL = "models/text-embedding-004"
+LLM_MODEL = "qwen/qwen3-32b"
+
+DATA_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data")
 INDEX_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "faiss_index")
