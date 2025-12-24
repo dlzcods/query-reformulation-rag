@@ -9,7 +9,7 @@ Saat ini didukung oleh **Qwen 3 32B (via Groq)** untuk kecepatan dan kecerdasan 
 1.  **Double-Hop Retrieval Logic**: Melakukan pencarian dua kali (Konteks Awal -> Reformulasi -> Pencarian Presisi).
 2.  **Query Reformulation (Bahasa Awam -> Hukum)**: Menggunakan LLM untuk menerjemahkan pertanyaan pengguna seperti *"Bos potong gaji seenaknya"* menjadi kueri hukum standar.
     *   **Hasil Evaluasi**: Mencapai **100% Hit Rate** pada dataset pengujian bahasa sehari-hari.
-3.  **Cross-Encoder Reranking**: Mengurutkan ulang dokumen untuk memastikan regulasi yang paling relevan muncul diposisi #1 (MRR Score: 0.900).
+3.  **Cross-Encoder Reranking**: Mengurutkan ulang dokumen untuk memastikan regulasi yang paling relevan muncul diposisi #1.
 4.  **UI Interaktif**: Menggunakan **Streamlit** untuk antarmuka chat yang responsif.
 5.  **Cloud Deployment**: Siap dideploy ke **Modal** untuk skalabilitas serverless.
 

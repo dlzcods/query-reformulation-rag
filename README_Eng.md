@@ -9,7 +9,7 @@ Currently powered by **Qwen 3 32B (via Groq)** for high-speed intelligent reason
 1.  **Double-Hop Retrieval Logic**: Performs two distinct searches (Context Gathering -> Reformulation -> Precision Search).
 2.  **Query Reformulation (Layman -> Legal)**: Uses an LLM to rewrite user's layperson questions (e.g., *"Boss cut my salary unfairly"*) into standardized legal queries.
     *   **Evaluation Result**: Achieved **100% Hit Rate** on stratified layman datasets.
-3.  **Cross-Encoder Reranking**: Re-orders search results to ensure the most relevant regulation appears at position #1 (MRR Score: 0.900).
+3.  **Cross-Encoder Reranking**: Re-orders search results to ensure the most relevant regulation appears at position #1.
 4.  **Interactive UI**: Built with **Streamlit** for a responsive chat experience.
 5.  **Cloud Deployment**: Ready for **Modal** serverless deployment.
 
