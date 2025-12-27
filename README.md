@@ -155,7 +155,6 @@ Selain evaluasi sistem otomatis, kami melakukan **LLM as a Judge Simulation** te
   - *Analisis:* Jawaban mengutip PP No. 28/2025 dan PP No. 36/2004 secara akurat dari context. Tidak ada info tambahan yang mengada-ada.
 - **Relevancy:** ⭐⭐⭐⭐⭐ (5/5)
   - *Analisis:* Jawaban langsung merespons keluhan "ribet nggak" dengan penjelasan tentang OSS dan klasifikasi risiko. Sangat solutif.
-- **Retrieval Quality:** ✅ Dokumen yang ditarik (tentang OSS, KBLI 46610) sangat relevan.
 
 ### 2. Perlindungan Napi Korban Bullying
 > **Pertanyaan:** "Kalau ada napi yang dibully... ada hukum yang ngelindungin mereka nggak sih?"
