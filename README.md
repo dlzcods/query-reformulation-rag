@@ -18,11 +18,11 @@ Saat ini didukung oleh **Qwen 3 32B (via Groq)** untuk kecepatan dan kecerdasan 
 1.  **Hop 1: Pencarian Awal (Context Gathering)**
     *   Sistem mencari dokumen kasar di Vector DB menggunakan pertanyaan asli.
 2.  **Reasoning & Reformulation**
-    *   **Qwen 3 32B** menganalisis hasil pencarian.
+    *   **Qwen 3 32B** menganalisis hasil pencarian (Top 3).
     *   Mereformulasi pertanyaan awam menjadi pertanyaan hukum baku.
 3.  **Hop 2: Pencarian Presisi (Precision Search)**
     *   Sistem mencari ulang menggunakan *Query Reformulasi*.
-    *   Dokumen di-rerank menggunakan model Cross-Encoder lokal.
+    *   Dokumen di-rerank menggunakan model Cross-Encoder (Top 8).
 4.  **Generation (Pembuatan Jawaban)**
     *   **Qwen 3 32B** menyusun jawaban berdasarkan dokumen hukum terpilih, menyertakan dasar hukum dan interpretasi.
 
@@ -43,6 +43,8 @@ legal-rag-system/
 ├── data/
 │   ├── kategori_hukumonline_sample.json      # Dataset artikel hukum
 │   └── eval_datasets/               # Dataset evaluasi 
+|       ├── evaluation_dataset.json  # Evaluasi Hit Rate & MRR
+|       └── ragas_input.json         # Evaluasi Faithfllnes & Relevance 
 ├── src/
 │   ├── evaluation/                  # Script evaluasi
 │   ├── config.py                    # Konfigurasi API
@@ -144,7 +146,7 @@ Berikut adalah 15 pertanyaan "bahasa awam" yang diujikan, lengkap dengan transfo
 | **ITE** | *"Sebarin lagu parodi ngehina orang kena pasal?"* | *"Tindakan hukum menyebarkan lagu parodi bermuatan penghinaan (UU ITE & KUHP)"* | Hukum Menyebarkan Lagu Bermuatan Penghinaan | **#1** | 🔼 **NAIK (2 -> 1)** |
 
 ### 3.2 Penilaian Kualitas Generasi (LLM-as-a-Judge)
-Selain evaluasi sistem otomatis, kami melakukan **LLM as a Judge Simulation** terhadap 15 sampel dengan kriteria penilaian **Faithfulness** dan **Answer Relevancy**.
+Selain evaluasi sistem otomatis, kami melakukan **LLM as a Judge Simulation** terhadap 15 sampel dengan kriteria penilaian **Faithfulness** dan **Answer Relevancy**. Dataset lengkap dengan jawaban LLM dapat dilihat di folder `eval_datasets/ragas_input.json`
 
 ## 📊 Detail Evaluasi Per Sampel
 
